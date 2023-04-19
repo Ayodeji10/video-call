@@ -92,18 +92,21 @@ function App() {
 
   const sendMessage = () => {
     const data = {
-      name,
       mesage,
+      id: socket.id,
       room: "abcde",
     };
     setMessages((prev) => {
       return [...prev, data];
     });
+    console.log(socket.id);
     socket.emit("send-message", data);
   };
 
   useEffect(() => {
     socket.on("recieve-message", (data) => {
+      console.log(socket.id);
+      console.log(data);
       setMessages((prev) => {
         return [...prev, data];
       });
@@ -115,67 +118,88 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <h1>Zoom</h1>
-      <h3>My Video</h3>
-      {stream && (
-        <video
-          playsInline
-          ref={myVideo}
-          autoPlay
-          muted
-          style={{ width: "300px", height: "250px" }}
-        />
-      )}
-      <h3>{name} Video</h3>
-      {callAccepted && !callEnded ? (
-        <video
-          playsInline
-          ref={userVideo}
-          autoPlay
-          muted
-          style={{ width: "300px", height: "250px" }}
-        />
-      ) : null}
-      <input
-        type="text"
-        placeholder="Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-      <CopyToClipboard text={me}>
-        <button>Copy ID</button>
-      </CopyToClipboard>
-      <input
-        type="text"
-        placeholder="Id to call"
-        value={idToCall}
-        onChange={(e) => setIdToCall(e.target.value)}
-      />
-      {callAccepted && !callEnded ? (
-        <button onClick={leaveCall}>End Call</button>
-      ) : (
-        <button onClick={() => callUser(idToCall)}>call</button>
-      )}
-      {receivingCall && !callAccepted ? (
-        <div>
-          <h4>{name} is calling</h4>
-          <button onClick={answerCall}>Answer</button>
+    <div className="App mt-5">
+      <h1 className="mb-4">Video Call App</h1>
+      <div className="d-flex justify-content-center gap-5">
+        <div className="video d-flex flex-column align-items-center">
+          <div className="d-flex mb-3 gap-5">
+            <div>
+              <h3>My Video</h3>
+              {stream && <video playsInline ref={myVideo} autoPlay muted />}
+            </div>
+            <div>
+              {callAccepted && !callEnded ? (
+                <>
+                  <h3>User Video</h3>
+                  <video playsInline ref={userVideo} autoPlay muted />
+                </>
+              ) : null}
+            </div>
+          </div>
+          <div className="d-flex gap-5">
+            <div className="mb-3">
+              <input
+                type="text"
+                placeholder="Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <CopyToClipboard text={me}>
+                <button>Copy ID</button>
+              </CopyToClipboard>
+            </div>
+            <div>
+              <input
+                type="text"
+                placeholder="Id to call"
+                value={idToCall}
+                onChange={(e) => setIdToCall(e.target.value)}
+              />
+              {callAccepted && !callEnded ? (
+                <button onClick={leaveCall}>End Call</button>
+              ) : (
+                <button onClick={() => callUser(idToCall)}>call</button>
+              )}
+            </div>
+          </div>
+          {receivingCall && !callAccepted ? (
+            <div>
+              <h4>{name} is calling</h4>
+              <button onClick={answerCall}>Answer</button>
+            </div>
+          ) : null}
         </div>
-      ) : null}
-      {callAccepted && (
-        <div>
-          <input
-            type="text"
-            placeholder="message"
-            onChange={(e) => setMessage(e.target.value)}
-          />
-          <button onClick={sendMessage}>send</button>
-        </div>
-      )}
-      {messages.map((m, i) => {
-        return <h2>{m.mesage}</h2>;
-      })}
+        {callAccepted && (
+          <div className="chat d-flex flex-column justify-content-between">
+            <div>
+              <h4>Chat Box</h4>
+              {messages.map((m, i) => {
+                return (
+                  <div
+                    className={`msg-box d-flex ${
+                      m.id !== socket.id
+                        ? "justify-content-start"
+                        : "justify-content-end mine"
+                    }`}
+                  >
+                    <div className="message">
+                      <h5 className="mb-0">{m.mesage}</h5>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div>
+              <input
+                type="text"
+                placeholder="message"
+                onChange={(e) => setMessage(e.target.value)}
+              />
+              <button onClick={sendMessage}>send</button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
