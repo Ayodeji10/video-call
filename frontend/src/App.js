@@ -4,7 +4,8 @@ import io from "socket.io-client";
 import "./App.css";
 import { useState, useEffect, useRef } from "react";
 
-const socket = io.connect("http://localhost:5000");
+// const socket = io.connect("http://localhost:5000");
+const socket = io.connect("https://video-call-api.onrender.com/");
 
 function App() {
   const [me, setMe] = useState(""); // my id
