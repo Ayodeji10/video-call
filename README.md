@@ -23,5 +23,3 @@ Backend is hosted on render.com with url https://video-call-api.onrender.com/
 The frontend is a basic react application using socket.io and WebRTC to communicate with the server, the packages installed are socket.io-client, simple-peer and react-copy-to-clipboard
 
 frontend is hosted on firbase with url https://video-call-app-20cf1.web.app/
-
-Please Note that both videos have been muted for the sake of echos that can occour during tests

@@ -124,13 +124,13 @@ function App() {
           <div className="d-flex mb-3 gap-5">
             <div>
               <h3>My Video</h3>
-              {stream && <video playsInline ref={myVideo} autoPlay muted />}
+              {stream && <video playsInline ref={myVideo} autoPlay />}
             </div>
             <div>
               {callAccepted && !callEnded ? (
                 <>
                   <h3>Caller Video</h3>
-                  <video playsInline ref={userVideo} autoPlay muted />
+                  <video playsInline ref={userVideo} autoPlay />
                 </>
               ) : null}
             </div>
