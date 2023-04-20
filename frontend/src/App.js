@@ -16,7 +16,6 @@ function App() {
   const [callAccepted, setCallAccepted] = useState(false);
   const [idToCall, setIdToCall] = useState(""); // id of other person
   const [callEnded, setCallEnded] = useState(false);
-  const [name, setName] = useState(""); // my name
   const [mesage, setMessage] = useState(""); // my message
   const [messages, setMessages] = useState([]); // array of messages
   const myVideo = useRef(); // my video
@@ -38,7 +37,6 @@ function App() {
     socket.on("callUser", (data) => {
       setReceivingCall(true);
       setCaller(data.from);
-      setName(data.name);
       setCallerSignal(data.signal);
     });
   }, []);
@@ -54,7 +52,6 @@ function App() {
         userToCall: id,
         signalData: data,
         from: me,
-        name: name,
       });
     });
     peer.on("stream", (stream) => {
@@ -91,7 +88,8 @@ function App() {
     connectionRef.current.destroy();
   };
 
-  const sendMessage = () => {
+  const sendMessage = (e) => {
+    e.preventDefault();
     const data = {
       mesage,
       id: socket.id,
@@ -131,7 +129,7 @@ function App() {
             <div>
               {callAccepted && !callEnded ? (
                 <>
-                  <h3>User Video</h3>
+                  <h3>Caller Video</h3>
                   <video playsInline ref={userVideo} autoPlay />
                 </>
               ) : null}
@@ -139,12 +137,12 @@ function App() {
           </div>
           <div className="d-flex gap-5">
             <div className="mb-3">
-              <input
+              {/* <input
                 type="text"
                 placeholder="Name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-              />
+              /> */}
               <CopyToClipboard text={me}>
                 <button>Copy ID</button>
               </CopyToClipboard>
@@ -165,7 +163,7 @@ function App() {
           </div>
           {receivingCall && !callAccepted ? (
             <div>
-              <h4>{name} is calling</h4>
+              <h4>{caller} is calling</h4>
               <button onClick={answerCall}>Answer</button>
             </div>
           ) : null}
@@ -191,13 +189,14 @@ function App() {
               })}
             </div>
             <div>
-              <form onSubmit={sendMessage}></form>
-              <input
-                type="text"
-                placeholder="message"
-                onChange={(e) => setMessage(e.target.value)}
-              />
-              <button onClick={sendMessage}>send</button>
+              <form onSubmit={(e) => sendMessage(e)}>
+                <input
+                  type="text"
+                  placeholder="message"
+                  onChange={(e) => setMessage(e.target.value)}
+                />
+                <button type="submit">send</button>
+              </form>
             </div>
           </div>
         )}
