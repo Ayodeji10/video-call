@@ -9,7 +9,6 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    // origin: "https://video-call-app-20cf1.web.app",
     origin: "*",
     methods: ["GET", "POST"],
   },

@@ -4,8 +4,8 @@ import io from "socket.io-client";
 import "./App.css";
 import { useState, useEffect, useRef } from "react";
 
-// const socket = io.connect("http://localhost:5000");
-const socket = io.connect("https://video-call-api.onrender.com/");
+const socket = io.connect("http://localhost:5000");
+// const socket = io.connect("https://video-call-api.onrender.com/");
 
 function App() {
   const [me, setMe] = useState(""); // my id
@@ -119,30 +119,24 @@ function App() {
   return (
     <div className="App mt-5">
       <h1 className="mb-4">Video Call App</h1>
-      <div className="d-flex justify-content-center gap-5">
+      <div className="d-flex justify-content-center align-items-lg-center align-items-md-center flex-lg-row flex-md-column gap-5">
         <div className="video d-flex flex-column align-items-center">
           <div className="d-flex mb-3 gap-5">
             <div>
               <h3>My Video</h3>
-              {stream && <video playsInline ref={myVideo} autoPlay />}
+              {stream && <video playsInline ref={myVideo} autoPlay muted />}
             </div>
             <div>
               {callAccepted && !callEnded ? (
                 <>
                   <h3>Caller Video</h3>
-                  <video playsInline ref={userVideo} autoPlay />
+                  <video playsInline ref={userVideo} autoPlay muted />
                 </>
               ) : null}
             </div>
           </div>
           <div className="d-flex gap-5">
             <div className="mb-3">
-              {/* <input
-                type="text"
-                placeholder="Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              /> */}
               <CopyToClipboard text={me}>
                 <button>Copy ID</button>
               </CopyToClipboard>
@@ -154,9 +148,7 @@ function App() {
                 value={idToCall}
                 onChange={(e) => setIdToCall(e.target.value)}
               />
-              {callAccepted && !callEnded ? (
-                <button onClick={leaveCall}>End Call</button>
-              ) : (
+              {callAccepted && !callEnded ? null : (
                 <button onClick={() => callUser(idToCall)}>call</button>
               )}
             </div>

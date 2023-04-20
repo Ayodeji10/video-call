@@ -32,6 +32,7 @@ button {
   padding: 20px;
   border-radius: 10px;
   max-width: 330px !important;
+  min-height: 450px;
 }
 
 .msg-box .message {
@@ -54,3 +55,21 @@ button {
   margin-bottom: 10px;
   background-color: rgb(129, 206, 129);
 }
+
+/* media queries */
+@media (min-width: 576px) and (max-width: 999px) {
+  video {
+    width: 300px;
+  }
+
+  .chat {
+    min-height: 350px;
+  }
+}
+
+/* @media (min-width: 0px) and (max-width: 575px) {
+  video {
+    width: 500px;
+    border-radius: 5px;
+  }
+} */
